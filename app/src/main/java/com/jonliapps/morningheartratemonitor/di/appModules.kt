@@ -26,6 +26,6 @@ val appModules = module {
 
     // ViewModels
     viewModel { MainViewModel(pulseRepository = get()) }
-    viewModel { StatisticsViewModel() }
+    viewModel { StatisticsViewModel(pulseRepository = get()) }
 
 }

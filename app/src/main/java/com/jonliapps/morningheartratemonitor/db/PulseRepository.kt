@@ -11,4 +11,9 @@ class PulseRepository(private val pulseDatasource: PulseDatasource) {
         return@coroutineScope task.await()
     }
 
+    suspend fun getAllPulse(): Result<List<Pulse>> = coroutineScope {
+        val task = async { pulseDatasource.getAllPulse() }
+        return@coroutineScope task.await()
+    }
+
 }

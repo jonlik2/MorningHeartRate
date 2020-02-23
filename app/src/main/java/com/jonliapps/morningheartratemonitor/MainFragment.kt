@@ -65,13 +65,13 @@ class MainFragment : Fragment() {
                 WorkState.STOP -> {
                 }
                 WorkState.FINISH -> {
-                    showALert()
+                    showAlert()
                 }
             }
         })
     }
 
-    private fun showALert() {
+    private fun showAlert() {
         val builder = AlertDialog.Builder(context!!)
         builder.apply {
             setTitle("Сохранить")

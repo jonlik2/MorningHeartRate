@@ -13,4 +13,12 @@ class PulseDatasource(private val pulseDao: PulseDao) {
         }
     }
 
+    suspend fun getAllPulse(): Result<List<Pulse>> {
+        return try {
+            Result.Success(pulseDao.getAllPulse())
+        } catch (e: Exception) {
+            Result.Error(e)
+        }
+    }
+
 }
