@@ -1,26 +1,26 @@
 package com.jonliapps.morningheartratemonitor.db
 
-import androidx.lifecycle.LiveData
 import androidx.room.*
 
 @Dao
-interface PulseDao {
+abstract class PulseDao(private val database: PulseDatabase) {
 
     @Insert
-    fun insert(pulse: Pulse)
+    abstract suspend fun insert(pulse: Pulse)
 
     @Update
-    fun update(pulse: Pulse)
+    abstract suspend fun update(pulse: Pulse)
 
     @Delete
-    fun delete(pulse: Pulse)
+    abstract suspend fun delete(pulse: Pulse)
 
     @Query("DELETE FROM pulse_table")
-    fun clear()
+    abstract suspend fun clear()
 
     @Query("SELECT * FROM pulse_table WHERE id = :key")
-    fun getPulse(key: Long): Pulse?
+    abstract suspend fun getPulse(key: Long): Pulse?
 
-    @Query("SELECT * FROM pulse_table ORDER BY date DESC")
-    fun getAllPulse(): LiveData<List<Pulse>>
+    @Query("SELECT * FROM pulse_table ORDER BY datetime(date)")
+    abstract suspend fun getAllPulse(): List<Pulse>
+
 }
