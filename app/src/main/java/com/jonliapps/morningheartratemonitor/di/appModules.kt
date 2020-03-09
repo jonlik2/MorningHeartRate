@@ -5,6 +5,7 @@ import com.jonliapps.morningheartratemonitor.MainViewModel
 import com.jonliapps.morningheartratemonitor.db.PulseDatabase
 import com.jonliapps.morningheartratemonitor.db.PulseDatasource
 import com.jonliapps.morningheartratemonitor.db.PulseRepository
+import com.jonliapps.morningheartratemonitor.savepulse.SavePulseViewModel
 import com.jonliapps.morningheartratemonitor.statistics.StatisticsViewModel
 import org.koin.android.ext.koin.androidApplication
 import org.koin.android.viewmodel.dsl.viewModel
@@ -27,5 +28,6 @@ val appModules = module {
     // ViewModels
     viewModel { MainViewModel(pulseRepository = get()) }
     viewModel { StatisticsViewModel(pulseRepository = get()) }
+    viewModel { SavePulseViewModel(pulseRepository = get()) }
 
 }

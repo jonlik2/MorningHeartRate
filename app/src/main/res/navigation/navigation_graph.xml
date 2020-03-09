@@ -14,10 +14,17 @@
             android:id="@+id/action_mainFragment_to_statisticsFragment"
             app:destination="@id/statisticsFragment"
             app:popUpTo="@id/mainFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_savePulseFragment"
+            app:destination="@id/savePulseFragment"
+            app:popUpTo="@id/mainFragment" />
     </fragment>
     <fragment
         android:id="@+id/statisticsFragment"
         android:name="com.jonliapps.morningheartratemonitor.statistics.StatisticsFragment"
         android:label="Статистика"
         tools:layout="@layout/fragment_statistics" />
+    <dialog
+        android:id="@+id/savePulseFragment"
+        android:name="com.jonliapps.morningheartratemonitor.savepulse.SavePulseFragment" />
 </navigation>

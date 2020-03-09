@@ -53,13 +53,4 @@ class MainViewModel(val pulseRepository: PulseRepository) : ViewModel() {
         timer.cancel()
     }
 
-    fun save(result: Int) {
-        viewModelScope.launch {
-            val pulse = Pulse(idGenerated, result, Calendar.getInstance().time)
-            when (pulseRepository.save(pulse)) {
-                is Result.Success -> Log.d("III", "saved ${pulse.value} ${pulse.date}")
-                is Result.Error -> Log.d("III", "error saved")
-            }
-        }
-    }
 }
