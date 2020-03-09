@@ -21,4 +21,10 @@
 
     </style>
 
+    <style name="AlertTheme" parent="ThemeOverlay.MaterialComponents.Dialog.Alert">
+        <item name="android:textColor">@color/colorPrimaryDark</item>
+        <item name="android:textColorPrimary">@color/colorPrimary</item>
+        <item name="android:colorButtonNormal">@color/colorAccent</item>
+    </style>
+
 </resources>
