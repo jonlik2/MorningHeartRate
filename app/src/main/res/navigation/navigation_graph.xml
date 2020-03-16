@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/mainFragment"
         android:name="com.jonliapps.morningheartratemonitor.MainFragment"
-        android:label="Main"
+        android:label="Пульс"
         tools:layout="@layout/fragment_main">
         <action
             android:id="@+id/action_mainFragment_to_statisticsFragment"
@@ -17,6 +17,10 @@
         <action
             android:id="@+id/action_mainFragment_to_savePulseFragment"
             app:destination="@id/savePulseFragment"
+            app:enterAnim="@anim/slide_down"
+            app:exitAnim="@anim/slide_up"
+            app:popEnterAnim="@anim/slide_down"
+            app:popExitAnim="@anim/slide_up"
             app:popUpTo="@id/mainFragment" />
     </fragment>
     <fragment
@@ -27,4 +31,8 @@
     <dialog
         android:id="@+id/savePulseFragment"
         android:name="com.jonliapps.morningheartratemonitor.savepulse.SavePulseFragment" />
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.jonliapps.morningheartratemonitor.settings.SettingsFragment"
+        android:label="Настройки" />
 </navigation>

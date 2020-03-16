@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.widget.Toolbar
+import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 
@@ -14,10 +15,12 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : AppCompatActivity() {
 
     private lateinit var toolbar: Toolbar
+    private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        navController = findNavController(R.id.nav_host_fragment)
         configureToolbar()
     }
 
@@ -28,7 +31,10 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            R.id.action_settings -> true
+            R.id.action_settings -> {
+                navController.navigate(R.id.settingsFragment)
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -40,7 +46,6 @@ class MainActivity : AppCompatActivity() {
     private fun configureToolbar() {
         toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
-        val navController = findNavController(R.id.nav_host_fragment)
         toolbar.setupWithNavController(navController)
     }
 }
