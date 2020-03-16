@@ -9,6 +9,7 @@ import com.jonliapps.morningheartratemonitor.db.Pulse
 import com.jonliapps.morningheartratemonitor.db.PulseRepository
 import com.jonliapps.morningheartratemonitor.utils.Result
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 class StatisticsViewModel(val pulseRepository: PulseRepository) : ViewModel() {
 
@@ -23,7 +24,7 @@ class StatisticsViewModel(val pulseRepository: PulseRepository) : ViewModel() {
         viewModelScope.launch {
             when (val result = pulseRepository.getAllPulse()) {
                 is Result.Success -> _pulses.value = result.data
-                is Result.Error -> Log.d("III", "error fetch pulses")
+                is Result.Error -> Timber.tag("III").d("error fetch pulses")
             }
         }
     }

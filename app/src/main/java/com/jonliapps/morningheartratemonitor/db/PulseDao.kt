@@ -20,7 +20,7 @@ abstract class PulseDao(private val database: PulseDatabase) {
     @Query("SELECT * FROM pulse_table WHERE id = :key")
     abstract suspend fun getPulse(key: Long): Pulse?
 
-    @Query("SELECT * FROM pulse_table ORDER BY datetime(date) DESC")
+    @Query("SELECT * FROM pulse_table ORDER BY date DESC")
     abstract suspend fun getAllPulse(): List<Pulse>
 
 }
