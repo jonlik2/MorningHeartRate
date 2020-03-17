@@ -18,6 +18,7 @@ import com.github.mikephil.charting.data.LineDataSet
 import com.jonliapps.morningheartratemonitor.R
 import com.jonliapps.morningheartratemonitor.databinding.FragmentStatisticsBinding
 import com.jonliapps.morningheartratemonitor.db.Pulse
+import com.jonliapps.morningheartratemonitor.utils.DateAxisValueFormatter
 import org.koin.android.ext.android.bind
 import org.koin.android.viewmodel.ext.android.viewModel
 
@@ -73,8 +74,8 @@ class StatisticsFragment : Fragment() {
         chart = binding.chartPulse
 
         val entries = mutableListOf<Entry>()
-        pulses.reversed().forEachIndexed { index, pulse ->
-            entries.add(Entry(index.toFloat(), pulse.value.toFloat()))
+        pulses.reversed().forEach { pulse ->
+            entries.add(Entry(pulse.date?.time!!.toFloat(), pulse.value.toFloat()))
         }
 
         val dataSet = LineDataSet(entries.toList(), "")
@@ -88,10 +89,13 @@ class StatisticsFragment : Fragment() {
         val xAxis = chart.xAxis
         xAxis.setDrawGridLines(false)
         xAxis.position = XAxis.XAxisPosition.BOTTOM
+        xAxis.valueFormatter = DateAxisValueFormatter()
 
         chart.axisRight.isEnabled = false
         val leftAxis = chart.axisLeft
         leftAxis.setDrawGridLines(false)
+
+        xAxis.valueFormatter
 
         chart.invalidate()
     }
