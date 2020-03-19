@@ -11,6 +11,11 @@ class PulseRepository(private val pulseDatasource: PulseDatasource) {
         return@coroutineScope task.await()
     }
 
+    suspend fun delete(pulse: Pulse): Result<Void?> = coroutineScope {
+        val task = async { pulseDatasource.delete(pulse) }
+        return@coroutineScope task.await()
+    }
+
     suspend fun getAllPulse(): Result<List<Pulse>> = coroutineScope {
         val task = async { pulseDatasource.getAllPulse() }
         return@coroutineScope task.await()

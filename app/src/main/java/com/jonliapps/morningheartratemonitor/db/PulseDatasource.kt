@@ -13,6 +13,15 @@ class PulseDatasource(private val pulseDao: PulseDao) {
         }
     }
 
+    suspend fun delete(pulse: Pulse): Result<Void?> {
+        return try {
+            pulseDao.delete(pulse)
+            Result.Success(null)
+        } catch (e: Exception) {
+            Result.Error(e)
+        }
+    }
+
     suspend fun getAllPulse(): Result<List<Pulse>> {
         return try {
             Result.Success(pulseDao.getAllPulse())

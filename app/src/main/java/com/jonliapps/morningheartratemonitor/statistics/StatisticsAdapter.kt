@@ -21,6 +21,11 @@ class StatisticsAdapter(
         holder.bind(viewModel, pulses[position])
     }
 
+    fun removeAt(position: Int) {
+        viewModel.delete(pulses[position])
+        notifyItemRemoved(position)
+    }
+
 }
 
 class StatisticsViewHolder(private val binding: RvPulseItemBinding) : RecyclerView.ViewHolder(binding.root) {

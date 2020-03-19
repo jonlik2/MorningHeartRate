@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.XAxis
@@ -19,6 +20,7 @@ import com.jonliapps.morningheartratemonitor.R
 import com.jonliapps.morningheartratemonitor.databinding.FragmentStatisticsBinding
 import com.jonliapps.morningheartratemonitor.db.Pulse
 import com.jonliapps.morningheartratemonitor.utils.DateAxisValueFormatter
+import com.jonliapps.morningheartratemonitor.utils.SwipeToDeleteCallback
 import org.koin.android.ext.android.bind
 import org.koin.android.viewmodel.ext.android.viewModel
 
@@ -56,6 +58,14 @@ class StatisticsFragment : Fragment() {
         recyclerView = binding.rvPulse
         adapter = StatisticsAdapter(listOf(), statisticsViewModel)
         recyclerView.adapter = adapter
+
+        val swipeHandler = object : SwipeToDeleteCallback(context!!) {
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                adapter.removeAt(viewHolder.adapterPosition)
+            }
+        }
+        val itemTouchHelper = ItemTouchHelper(swipeHandler)
+        itemTouchHelper.attachToRecyclerView(recyclerView)
     }
 
     private fun setupObserverViewModel() {
