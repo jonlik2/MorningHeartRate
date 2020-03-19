@@ -32,7 +32,10 @@ class StatisticsViewModel(val pulseRepository: PulseRepository) : ViewModel() {
     fun delete(pulse: Pulse) {
         viewModelScope.launch {
             when (pulseRepository.delete(pulse)) {
-                is Result.Success -> Timber.tag("III").d("delete ${pulse.value}")
+                is Result.Success -> {
+                    fetchPulsesList()
+                    Timber.tag("III").d("delete ${pulse.value}")
+                }
                 is Result.Error -> Timber.tag("III").d("error delete")
             }
         }
