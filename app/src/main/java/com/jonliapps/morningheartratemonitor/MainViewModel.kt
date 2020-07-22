@@ -1,27 +1,26 @@
 package com.jonliapps.morningheartratemonitor
 
 import android.os.CountDownTimer
+import android.os.SystemClock
 import android.text.format.DateUtils
-import android.util.Log
 import androidx.lifecycle.*
-import com.jonliapps.morningheartratemonitor.db.Pulse
 import com.jonliapps.morningheartratemonitor.db.PulseRepository
-import com.jonliapps.morningheartratemonitor.utils.Result
-import com.jonliapps.morningheartratemonitor.utils.idGenerated
 import kotlinx.coroutines.launch
-import java.util.*
+import kotlin.math.round
+import kotlin.math.roundToInt
 
 class MainViewModel(val pulseRepository: PulseRepository) : ViewModel() {
 
     companion object {
         const val ZERO = 0L
-        const val ONE_SECOND = 1000L
+        const val TIME_INTERVAL = 100L
         const val END_TIME = 10000L
     }
 
-    val state = MutableLiveData<WorkState>(WorkState.STOP)
+    val state = MutableLiveData<WorkState>(WorkState.STOPPED)
 
-    private val timer: CountDownTimer
+    private lateinit var timer: CountDownTimer
+    private var secondsLeft = 0
 
     private val _currentTime = MutableLiveData<Long>(END_TIME / 1000)
     val currentTime: LiveData<Long> = _currentTime
@@ -30,26 +29,36 @@ class MainViewModel(val pulseRepository: PulseRepository) : ViewModel() {
         DateUtils.formatElapsedTime(time)
     }
 
-    init {
-        timer = object : CountDownTimer(END_TIME, ONE_SECOND) {
-            override fun onFinish() {
-                _currentTime.value = END_TIME / 1000
-                state.value = WorkState.FINISH
-            }
-
-            override fun onTick(p0: Long) {
-                _currentTime.value = p0 / ONE_SECOND
-            }
-        }
-    }
-
     fun start() {
-        state.value = WorkState.STARTED
-        timer.start()
+        state.value = WorkState.RUNNING
+        initTimer()
     }
 
     fun stop() {
-        state.value = WorkState.STOP
+        state.value = WorkState.STOPPED
+        resetTimer()
+    }
+
+    private fun initTimer() {
+        viewModelScope.launch {
+            timer = object : CountDownTimer(END_TIME, TIME_INTERVAL) {
+                override fun onFinish() {
+                    _currentTime.value = END_TIME / 1000
+                    state.value = WorkState.FINISHED
+                }
+
+                override fun onTick(p0: Long) {
+                    if ((p0.toFloat() / 1000.0f).roundToInt() != secondsLeft) {
+                        secondsLeft = (p0.toFloat() / 1000.0f).roundToInt()
+                        _currentTime.value = secondsLeft.toLong()
+                    }
+                }
+            }
+            timer.start()
+        }
+    }
+
+    private fun resetTimer() {
         timer.cancel()
     }
 

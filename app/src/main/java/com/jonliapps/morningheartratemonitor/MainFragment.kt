@@ -46,7 +46,7 @@ class MainFragment : Fragment() {
 
     private fun configureButtonStart() {
         binding.btnStart.setOnClickListener {
-            if (mainViewModel.state.value != WorkState.STARTED) {
+            if (mainViewModel.state.value != WorkState.RUNNING) {
                 mainViewModel.start()
             } else {
                 mainViewModel.stop()
@@ -57,19 +57,19 @@ class MainFragment : Fragment() {
     private fun observeWorkState() {
         mainViewModel.state.observe(viewLifecycleOwner, Observer { state ->
             when (state) {
-                WorkState.STARTED -> {
+                WorkState.RUNNING -> {
                 }
-                WorkState.STOP -> {
+                WorkState.STOPPED -> {
                 }
-                WorkState.FINISH -> {
-                    showDialog()
+                WorkState.FINISHED -> {
+                    showSaveDialog()
                     mainViewModel.stop()
                 }
             }
         })
     }
 
-    private fun showDialog() {
+    private fun showSaveDialog() {
         findNavController().navigate(R.id.savePulseFragment)
     }
 
