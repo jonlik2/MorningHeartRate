@@ -1,6 +1,7 @@
 package com.jonliapps.morningheartratemonitor
 
 
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,15 +10,18 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import androidx.preference.PreferenceManager
 import com.jonliapps.morningheartratemonitor.databinding.FragmentMainBinding
 import org.koin.android.viewmodel.ext.android.viewModel
 
 
-class MainFragment : Fragment() {
+class MainFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListener {
 
     private lateinit var binding: FragmentMainBinding
 
     private val mainViewModel: MainViewModel by viewModel()
+
+    private lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,7 +33,21 @@ class MainFragment : Fragment() {
         configureButtonStart()
         observeWorkState()
 
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(activity?.applicationContext)
+        sharedPreferences.registerOnSharedPreferenceChangeListener(this)
+
         return binding.root
+    }
+
+    override fun onSharedPreferenceChanged(prefs: SharedPreferences?, key: String?) {
+        if (key == "times") {
+            mainViewModel.fullTime.value = sharedPreferences.getString("times", "0")?.toLong() ?: 30
+        }
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        sharedPreferences.unregisterOnSharedPreferenceChangeListener(this)
     }
 
     private fun configureBinding(inflater: LayoutInflater, container: ViewGroup?) {

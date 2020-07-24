@@ -1,33 +1,33 @@
 package com.jonliapps.morningheartratemonitor
 
+import android.app.Application
 import android.os.CountDownTimer
-import android.os.SystemClock
 import android.text.format.DateUtils
-import androidx.lifecycle.*
-import com.jonliapps.morningheartratemonitor.db.PulseRepository
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import androidx.preference.PreferenceManager
 import kotlinx.coroutines.launch
-import kotlin.math.round
 import kotlin.math.roundToInt
 
-class MainViewModel(val pulseRepository: PulseRepository) : ViewModel() {
+class MainViewModel(private val application: Application) : ViewModel() {
 
     companion object {
-        const val ZERO = 0L
         const val TIME_INTERVAL = 100L
-        const val END_TIME = 10000L
     }
 
-    val state = MutableLiveData<WorkState>(WorkState.STOPPED)
+    private val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(application.applicationContext)
+    var fullTime: MutableLiveData<Long> = MutableLiveData(sharedPreferences.getString("times", "0")?.toLong() ?: 30)
 
     private lateinit var timer: CountDownTimer
     private var secondsLeft = 0
 
-    private val _currentTime = MutableLiveData<Long>(END_TIME / 1000)
-    val currentTime: LiveData<Long> = _currentTime
-
-    val currentTimeString = Transformations.map(currentTime) { time ->
+    val currentTimeString = Transformations.map(fullTime) { time ->
         DateUtils.formatElapsedTime(time)
     }
+
+    val state = MutableLiveData<WorkState>(WorkState.STOPPED)
 
     fun start() {
         state.value = WorkState.RUNNING
@@ -41,16 +41,16 @@ class MainViewModel(val pulseRepository: PulseRepository) : ViewModel() {
 
     private fun initTimer() {
         viewModelScope.launch {
-            timer = object : CountDownTimer(END_TIME, TIME_INTERVAL) {
+            timer = object : CountDownTimer(fullTime.value!! * 1000L, TIME_INTERVAL) {
                 override fun onFinish() {
-                    _currentTime.value = END_TIME / 1000
+                    fullTime.value = sharedPreferences.getString("times", "0")?.toLong() ?: 30
                     state.value = WorkState.FINISHED
                 }
 
                 override fun onTick(p0: Long) {
                     if ((p0.toFloat() / 1000.0f).roundToInt() != secondsLeft) {
                         secondsLeft = (p0.toFloat() / 1000.0f).roundToInt()
-                        _currentTime.value = secondsLeft.toLong()
+                        fullTime.value = secondsLeft.toLong()
                     }
                 }
             }
