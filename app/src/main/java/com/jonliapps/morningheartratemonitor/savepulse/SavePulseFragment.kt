@@ -1,5 +1,6 @@
 package com.jonliapps.morningheartratemonitor.savepulse
 
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,18 +8,25 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import androidx.navigation.fragment.findNavController
+import androidx.preference.PreferenceManager
 import com.jonliapps.morningheartratemonitor.EventObserver
 import com.jonliapps.morningheartratemonitor.R
+import com.jonliapps.morningheartratemonitor.databinding.DialogSavePulseBinding
 import org.koin.android.viewmodel.ext.android.viewModel
 
 class SavePulseFragment : DialogFragment() {
+
+    private lateinit var binding: DialogSavePulseBinding
 
     private val savePulseViewModel: SavePulseViewModel by viewModel()
 
     private lateinit var toolbarDialog: Toolbar
     private lateinit var editTextPulse: EditText
+
+    private lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,14 +41,16 @@ class SavePulseFragment : DialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.dialog_save_pulse, container, false)
 
-        toolbarDialog = view.findViewById(R.id.toolbar_dialog)
-        editTextPulse = view.findViewById(R.id.et_pulse)
+        configureBinding(inflater, container)
+
+        toolbarDialog = binding.toolbarDialog
+        editTextPulse = binding.etPulse
 
         setupObserverViewModel()
+        setupTextToLabel()
 
-        return view
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -53,6 +63,12 @@ class SavePulseFragment : DialogFragment() {
         }
     }
 
+    private fun configureBinding(inflater: LayoutInflater, container: ViewGroup?) {
+        binding = DataBindingUtil.inflate(inflater, R.layout.dialog_save_pulse, container, false)
+        binding.viewModel = savePulseViewModel
+        binding.lifecycleOwner = this
+    }
+
     private fun setupObserverViewModel() {
         savePulseViewModel.openMainFragment.observe(viewLifecycleOwner, EventObserver {
             openMainFragment()
@@ -61,6 +77,14 @@ class SavePulseFragment : DialogFragment() {
 
     private fun openMainFragment() {
         findNavController().navigate(R.id.mainFragment)
+    }
+
+    private fun setupTextToLabel() {
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(activity?.applicationContext)
+        val pulseValue = sharedPreferences.getString("times", "0")?.toInt()
+        pulseValue?.let {
+            savePulseViewModel.generateTextToLabel(it)
+        }
     }
 
 }

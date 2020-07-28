@@ -12,7 +12,11 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.preference.PreferenceManager
 import com.jonliapps.morningheartratemonitor.databinding.FragmentMainBinding
+import com.jonliapps.morningheartratemonitor.savepulse.SavePulseViewModel
+import kotlinx.android.synthetic.main.fragment_main.*
 import org.koin.android.viewmodel.ext.android.viewModel
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 class MainFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListener {

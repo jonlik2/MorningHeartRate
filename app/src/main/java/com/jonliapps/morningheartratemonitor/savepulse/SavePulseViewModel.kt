@@ -18,6 +18,9 @@ class SavePulseViewModel(val pulseRepository: PulseRepository) : ViewModel() {
     private val _openMainFragment = MutableLiveData<Event<Unit>>()
     val openMainFragment: LiveData<Event<Unit>> = _openMainFragment
 
+    private val _textToLabel = MutableLiveData<String>()
+    val textToLabel: LiveData<String> = _textToLabel
+
     fun save(result: Int) {
         viewModelScope.launch {
             val pulse = Pulse(idGenerated, result, Calendar.getInstance().time)
@@ -28,6 +31,17 @@ class SavePulseViewModel(val pulseRepository: PulseRepository) : ViewModel() {
                 }
                 is Result.Error -> Timber.d("error saved")
             }
+        }
+    }
+
+    fun generateTextToLabel(pulseValue: Int) {
+        val count = 60 / pulseValue
+        if (pulseValue != 60) {
+            _textToLabel.value =
+                "Умножьте на $count количество ударов за $pulseValue секунд и введите полученное значение"
+        } else {
+            _textToLabel.value =
+                "Введите полученное значение"
         }
     }
 

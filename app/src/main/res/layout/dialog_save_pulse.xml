@@ -1,60 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <com.google.android.material.appbar.AppBarLayout
+    <data>
+        <variable
+            name="viewModel"
+            type="com.jonliapps.morningheartratemonitor.savepulse.SavePulseViewModel" />
+    </data>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:elevation="0dp">
+        android:layout_height="match_parent">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar_dialog"
+        <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:paddingEnd="16dp"
-            android:paddingStart="6dp"
-            app:contentInsetStartWithNavigation="0dp"
-            app:navigationIcon="@drawable/ic_close_24px" />
-
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/dialog_root_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-        <TextView
-            android:id="@+id/label_text_dialog"
-            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="150dp"
-            android:layout_marginEnd="24dp"
-            android:text="Умножьте на 2 количество ударов за 30 секунд и введите полученное значение"
-            android:textAlignment="center"
-            android:textSize="16sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:elevation="0dp">
 
-        <EditText
-            android:id="@+id/et_pulse"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:ems="10"
-            android:inputType="number"
-            android:textAlignment="center"
-            android:textSize="28sp"
-            app:layout_constraintEnd_toEndOf="@+id/label_text_dialog"
-            app:layout_constraintStart_toStartOf="@+id/label_text_dialog"
-            app:layout_constraintTop_toBottomOf="@+id/label_text_dialog"
-            tools:text="55" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar_dialog"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:paddingEnd="16dp"
+                android:paddingStart="6dp"
+                app:contentInsetStartWithNavigation="0dp"
+                app:navigationIcon="@drawable/ic_close_24px" />
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/dialog_root_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <TextView
+                android:id="@+id/label_text_dialog"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="150dp"
+                android:layout_marginEnd="24dp"
+                android:text="@{viewModel.textToLabel}"
+                android:textAlignment="center"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/et_pulse"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:ems="10"
+                android:inputType="number"
+                android:textAlignment="center"
+                android:textSize="28sp"
+                app:layout_constraintEnd_toEndOf="@+id/label_text_dialog"
+                app:layout_constraintStart_toStartOf="@+id/label_text_dialog"
+                app:layout_constraintTop_toBottomOf="@+id/label_text_dialog"
+                tools:text="55" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>
