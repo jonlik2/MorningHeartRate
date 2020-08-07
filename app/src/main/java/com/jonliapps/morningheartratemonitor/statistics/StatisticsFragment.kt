@@ -16,6 +16,7 @@ import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
+import com.github.mikephil.charting.formatter.ValueFormatter
 import com.jonliapps.morningheartratemonitor.R
 import com.jonliapps.morningheartratemonitor.databinding.FragmentStatisticsBinding
 import com.jonliapps.morningheartratemonitor.db.Pulse
@@ -59,7 +60,7 @@ class StatisticsFragment : Fragment() {
         adapter = StatisticsAdapter(listOf(), statisticsViewModel)
         recyclerView.adapter = adapter
 
-        val swipeHandler = object : SwipeToDeleteCallback(context!!) {
+        val swipeHandler = object : SwipeToDeleteCallback(requireContext()) {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 adapter.removeAt(viewHolder.adapterPosition)
             }
@@ -89,6 +90,11 @@ class StatisticsFragment : Fragment() {
         }
 
         val dataSet = LineDataSet(entries.toList(), "")
+        dataSet.valueFormatter = object : ValueFormatter() {
+            override fun getPointLabel(entry: Entry?): String {
+                return entry?.y?.toInt().toString()
+            }
+        }
 
         val lineData = LineData(dataSet)
         chart.data = lineData
@@ -105,7 +111,7 @@ class StatisticsFragment : Fragment() {
         val leftAxis = chart.axisLeft
         leftAxis.setDrawGridLines(false)
 
-        xAxis.valueFormatter
+        //xAxis.valueFormatter
 
         chart.invalidate()
     }
