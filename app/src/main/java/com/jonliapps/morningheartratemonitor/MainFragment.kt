@@ -70,8 +70,10 @@ class MainFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
         binding.btnStart.setOnClickListener {
             if (mainViewModel.state.value != WorkState.RUNNING) {
                 mainViewModel.start()
+                binding.motionLayout.transitionToEnd()
             } else {
                 mainViewModel.stop()
+                binding.motionLayout.transitionToStart()
             }
         }
     }
@@ -86,6 +88,10 @@ class MainFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
                 WorkState.FINISHED -> {
                     showSaveDialog()
                     mainViewModel.stop()
+                }
+                WorkState.UNKNOWN -> {
+                }
+                WorkState.RESET -> {
                 }
             }
         })

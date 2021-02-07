@@ -1,7 +1,6 @@
 package com.jonliapps.morningheartratemonitor.statistics
 
 
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -22,7 +21,6 @@ import com.jonliapps.morningheartratemonitor.databinding.FragmentStatisticsBindi
 import com.jonliapps.morningheartratemonitor.db.Pulse
 import com.jonliapps.morningheartratemonitor.utils.DateAxisValueFormatter
 import com.jonliapps.morningheartratemonitor.utils.SwipeToDeleteCallback
-import org.koin.android.ext.android.bind
 import org.koin.android.viewmodel.ext.android.viewModel
 
 
@@ -110,8 +108,6 @@ class StatisticsFragment : Fragment() {
         chart.axisRight.isEnabled = false
         val leftAxis = chart.axisLeft
         leftAxis.setDrawGridLines(false)
-
-        //xAxis.valueFormatter
 
         chart.invalidate()
     }
