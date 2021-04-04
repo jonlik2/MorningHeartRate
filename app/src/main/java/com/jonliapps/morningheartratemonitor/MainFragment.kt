@@ -2,6 +2,7 @@ package com.jonliapps.morningheartratemonitor
 
 
 import android.content.SharedPreferences
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,11 +13,8 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.preference.PreferenceManager
 import com.jonliapps.morningheartratemonitor.databinding.FragmentMainBinding
-import com.jonliapps.morningheartratemonitor.savepulse.SavePulseViewModel
-import kotlinx.android.synthetic.main.fragment_main.*
 import org.koin.android.viewmodel.ext.android.viewModel
-import java.text.SimpleDateFormat
-import java.util.*
+import timber.log.Timber
 
 
 class MainFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListener {
@@ -27,14 +25,17 @@ class MainFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
 
     private lateinit var sharedPreferences: SharedPreferences
 
+    private lateinit var mediaPlayer: MediaPlayer
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         configureBinding(inflater, container)
+        configureMediaPlayer()
         configureFab()
-        configureButtonStart()
+        configureButtons()
         observeWorkState()
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(activity?.applicationContext)
@@ -52,6 +53,7 @@ class MainFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
     override fun onDetach() {
         super.onDetach()
         sharedPreferences.unregisterOnSharedPreferenceChangeListener(this)
+        mediaPlayer.release()
     }
 
     private fun configureBinding(inflater: LayoutInflater, container: ViewGroup?) {
@@ -66,35 +68,50 @@ class MainFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
         }
     }
 
-    private fun configureButtonStart() {
+    private fun configureButtons() {
         binding.btnStart.setOnClickListener {
-            if (mainViewModel.state.value != WorkState.RUNNING) {
-                mainViewModel.start()
-                binding.motionLayout.transitionToEnd()
-            } else {
-                mainViewModel.stop()
-                binding.motionLayout.transitionToStart()
+            if (mainViewModel.state.value == WorkState.START) {
+                mainViewModel.run()
+            }
+        }
+        binding.btnReset.setOnClickListener {
+            if (mainViewModel.state.value == WorkState.RUN) {
+                mainViewModel.reset()
             }
         }
     }
 
     private fun observeWorkState() {
-        mainViewModel.state.observe(viewLifecycleOwner, Observer { state ->
+        mainViewModel.state.observe(viewLifecycleOwner, { state ->
             when (state) {
-                WorkState.RUNNING -> {
+                WorkState.START -> {
+                    Timber.d("START")
                 }
-                WorkState.STOPPED -> {
+                WorkState.RUN -> {
+                    Timber.d("RUN")
+                    mediaPlayer.start()
+                    binding.motionLayout.transitionToEnd()
                 }
-                WorkState.FINISHED -> {
+                WorkState.FINISH -> {
+                    Timber.d("FINISH")
+                    mediaPlayer.stop()
+                    mainViewModel.start()
                     showSaveDialog()
-                    mainViewModel.stop()
-                }
-                WorkState.UNKNOWN -> {
+                    binding.motionLayout.transitionToStart()
                 }
                 WorkState.RESET -> {
+                    Timber.d("RESET")
+                    mediaPlayer.stop()
+                    mainViewModel.start()
+                    binding.motionLayout.transitionToStart()
                 }
+                else -> {}
             }
         })
+    }
+
+    private fun configureMediaPlayer() {
+        mediaPlayer = MediaPlayer.create(activity?.applicationContext, R.raw.beep_1)
     }
 
     private fun showSaveDialog() {

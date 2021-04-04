@@ -3,15 +3,13 @@ package com.jonliapps.morningheartratemonitor
 import android.app.Application
 import android.os.CountDownTimer
 import android.text.format.DateUtils
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import androidx.preference.PreferenceManager
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
-class MainViewModel(private val application: Application) : ViewModel() {
+class MainViewModel(application: Application) : ViewModel() {
 
     companion object {
         const val TIME_INTERVAL = 100L
@@ -27,24 +25,31 @@ class MainViewModel(private val application: Application) : ViewModel() {
         DateUtils.formatElapsedTime(time)
     }
 
-    val state = MutableLiveData<WorkState>(WorkState.STOPPED)
+    private val _state = MutableLiveData(WorkState.START)
+    val state: LiveData<WorkState> = _state
 
     fun start() {
-        state.value = WorkState.RUNNING
+        _state.value = WorkState.START
+        fullTime.value = sharedPreferences.getString("times", "0")?.toLong() ?: 30
+    }
+
+    fun run() {
+        _state.value = WorkState.RUN
         initTimer()
     }
 
-    fun stop() {
-        state.value = WorkState.STOPPED
+    fun reset() {
+        _state.value = WorkState.RESET
         resetTimer()
     }
 
     private fun initTimer() {
         viewModelScope.launch {
-            timer = object : CountDownTimer(fullTime.value!! * 1000L, TIME_INTERVAL) {
+            delay(3000)
+            timer = object : CountDownTimer((fullTime.value ?: 30) * 1000L, TIME_INTERVAL) {
                 override fun onFinish() {
                     fullTime.value = sharedPreferences.getString("times", "0")?.toLong() ?: 30
-                    state.value = WorkState.FINISHED
+                    _state.value = WorkState.FINISH
                 }
 
                 override fun onTick(p0: Long) {

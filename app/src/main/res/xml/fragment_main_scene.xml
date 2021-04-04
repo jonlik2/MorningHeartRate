@@ -6,7 +6,9 @@
     <Transition
         motion:constraintSetEnd="@+id/end"
         motion:constraintSetStart="@id/start"
-        motion:duration="1000">
+        motion:duration="1000"
+        motion:autoTransition="none"
+        motion:motionInterpolator="easeOut">
        <KeyFrameSet>
        </KeyFrameSet>
     </Transition>
@@ -35,6 +37,14 @@
             motion:layout_constraintBottom_toTopOf="@+id/btn_start"
             android:layout_marginBottom="4dp">
         </Constraint>
+        <Constraint
+            android:id="@+id/btn_reset"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintEnd_toEndOf="parent"
+            motion:layout_constraintBottom_toTopOf="@+id/fab_statistics"
+            android:layout_marginBottom="32dp"/>
     </ConstraintSet>
 
     <ConstraintSet android:id="@+id/end">

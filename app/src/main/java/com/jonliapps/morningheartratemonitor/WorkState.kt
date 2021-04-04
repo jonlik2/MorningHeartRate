@@ -1,9 +1,8 @@
 package com.jonliapps.morningheartratemonitor
 
 enum class WorkState {
-    UNKNOWN,
-    RUNNING,
-    STOPPED,
-    FINISHED,
+    START,
+    RUN,
+    FINISH,
     RESET
 }
