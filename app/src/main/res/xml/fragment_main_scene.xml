@@ -41,6 +41,8 @@
             android:id="@+id/btn_reset"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
+            android:scaleX="1.0"
+            android:scaleY="1.0"
             motion:layout_constraintStart_toStartOf="parent"
             motion:layout_constraintEnd_toEndOf="parent"
             motion:layout_constraintBottom_toTopOf="@+id/fab_statistics"
@@ -52,8 +54,6 @@
             android:id="@+id/btn_start"
             android:layout_width="150dp"
             android:layout_height="80dp"
-            android:scaleX="1.2"
-            android:scaleY="1.2"
             motion:layout_constraintBottom_toBottomOf="parent"
             motion:layout_constraintEnd_toEndOf="parent"
             motion:layout_constraintStart_toStartOf="parent"
@@ -69,5 +69,15 @@
             motion:layout_constraintEnd_toEndOf="parent"
             motion:layout_constraintStart_toStartOf="parent">
         </Constraint>
+        <Constraint
+            android:id="@+id/btn_reset"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:scaleX="1.2"
+            android:scaleY="1.2"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintEnd_toEndOf="parent"
+            motion:layout_constraintBottom_toTopOf="@+id/fab_statistics"
+            android:layout_marginBottom="32dp"/>
     </ConstraintSet>
 </MotionScene>

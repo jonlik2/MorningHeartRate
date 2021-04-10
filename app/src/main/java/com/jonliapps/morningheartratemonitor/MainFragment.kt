@@ -86,6 +86,7 @@ class MainFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
             when (state) {
                 WorkState.START -> {
                     Timber.d("START")
+                    configureMediaPlayer()
                 }
                 WorkState.RUN -> {
                     Timber.d("RUN")
