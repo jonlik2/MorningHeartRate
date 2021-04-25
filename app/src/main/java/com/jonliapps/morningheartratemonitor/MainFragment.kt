@@ -9,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.preference.PreferenceManager
 import com.jonliapps.morningheartratemonitor.databinding.FragmentMainBinding
@@ -34,7 +33,6 @@ class MainFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
 
         configureBinding(inflater, container)
         configureMediaPlayer()
-        configureFab()
         configureButtons()
         observeWorkState()
 
@@ -60,12 +58,6 @@ class MainFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_main, container, false)
         binding.viewModel = mainViewModel
         binding.lifecycleOwner = this
-    }
-
-    private fun configureFab() {
-        binding.fabStatistics.setOnClickListener {
-            findNavController().navigate(R.id.statisticsFragment)
-        }
     }
 
     private fun configureButtons() {
